@@ -1,9 +1,6 @@
 import json, asyncio, websockets
 
 
-
-
-
 def sudoku_verifier(sudoku_grid):
     #creates lists of 9 empty sets
     rows = [set() for _ in range(9)]
@@ -32,32 +29,26 @@ def sudoku_verifier(sudoku_grid):
 
     return 1
 
-'''
-if sudoku_verifier(python_sudoku_arr):
-    print('Pass')
-else:
-    print('fail')
-'''
 
 
-
-
+#recieve json array and return 1 for pass and 0 for fail
 async def sudoku_reply(websocket):
 
+    #get json array from client
     json_attempt = await websocket.recv()
 
+    #convery json to python list
     attempt_list = json.loads(json_attempt)
 
+    #call python list on sudoku_verifier to solve
     if sudoku_verifier(attempt_list):
-        await websocket.send('1')
+        await websocket.send('1')#if it solves the puzzle, return 1
     else:
-        await websocket.send('0')
+        await websocket.send('0')#else return 0
 
 
 
-
-
-
+#set up websocket server
 async def main():
     async with websockets.serve(sudoku_reply, "localhost", 8765):
         await asyncio.Future()  # run forever

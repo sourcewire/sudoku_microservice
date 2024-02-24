@@ -1,12 +1,6 @@
-import json
+import json, asyncio, websockets
 
 
-json_sudoku_arr = '[[5, 3, 0, 0, 7, 0, 0, 0, 0],[6, 0, 0, 1, 9, 5, 0, 0, 0],[0, 9, 8, 0, 0, 0, 0, 6, 0],[8, 0, 0, 0, 6, 0, 0, 0, 3],[4, 0, 0, 8, 0, 3, 0, 0, 1],[7, 0, 0, 0, 2, 0, 0, 0, 6],[0, 6, 0, 0, 0, 0, 2, 8, 0],[0, 0, 0, 4, 1, 9, 0, 0, 5],[0, 0, 0, 0, 8, 0, 0, 7, 9]]'
-                
-
-python_sudoku_arr = json.loads(json_sudoku_arr)
-print(python_sudoku_arr)
-print(type(python_sudoku_arr))
 
 
 
@@ -38,8 +32,61 @@ def sudoku_verifier(sudoku_grid):
 
     return 1
 
-
+'''
 if sudoku_verifier(python_sudoku_arr):
     print('Pass')
 else:
     print('fail')
+'''
+
+
+
+
+async def sudoku_reply(websocket):
+
+    json_attempt = await websocket.recv()
+
+    attempt_list = json.loads(json_attempt)
+
+    if sudoku_verifier(attempt_list):
+        await websocket.send('1')
+    else:
+        await websocket.send('0')
+
+
+
+
+
+
+async def main():
+    async with websockets.serve(sudoku_reply, "localhost", 8765):
+        await asyncio.Future()  # run forever
+
+
+if __name__ == "__main__":
+    asyncio.run(main())
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

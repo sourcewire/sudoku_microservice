@@ -40,6 +40,8 @@ async def sudoku_reply(websocket):
     #convery json to python list
     attempt_list = json.loads(json_attempt)
 
+    print("Checking solution...")
+
     #call python list on sudoku_verifier to solve
     if sudoku_verifier(attempt_list):
         await websocket.send('1')#if it solves the puzzle, return 1

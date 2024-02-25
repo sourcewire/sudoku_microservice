@@ -29,10 +29,10 @@ B.How to recieve data: To recieve data, setup a event handler to reciver data fr
        // close websocket connection after receiving the result
         websocket.close();
     });
-}
 
-//call client to init websocket communication
-client();
+
+    //call client to init websocket communication
+    client();
 
 
 C.UML sequence diagram:
